@@ -4,29 +4,26 @@ using UnityEngine;
 
 
 
-/**
- * Parent class for Singleton classes.
- * 
- **************************************************************************
- * Although not necessary, subclasses should implement an Instance method like
- * the one that follows. Otherwise the result from Instance will need to be casted.
- * 
- * Standard VRBSingletonAsComponent Instance method:
- 
-public static VRBEntitlementCheck Instance
-{
-    get
-    {
-        return ((VRBEntitlementCheck)_Instance);
-    }
-
-    set
-    {
-        _Instance = value;
-    }
-}
- **************************************************************************
- **/
+/// <summary>
+/// Parent class for Singleton classes.
+/// 
+/// Although not necessary, subclasses should implement an Instance method like
+/// the one that follows.Otherwise the result from Instance will need to be cast.
+/// 
+/// 
+/// public static VRBEntitlementCheck Instance
+/// {
+///     get
+///     {
+///         return ((VRBEntitlementCheck)_Instance);
+///     }
+/// 
+///     set
+///     {
+///         _Instance = value;
+///     }
+/// }
+/// </summary>
 public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAsComponent<T>
 {
     private static T __Instance;
@@ -56,19 +53,33 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
                         }
                     }
                 }
+
+
+                // Attempt to load the Singleton as a resource.
                 GameObject go;
                 Object o = Resources.Load(typeof(T).Name, typeof(GameObject));
+
+
+                // If the Singleton was obtained, then instantiate it.
                 if (null != o)
                 {
                     go = Instantiate(o) as GameObject;
                 }
+
+                // Otherwise, create a game object with the script attached.
                 else
                 {
                     go = new GameObject(typeof(T).Name, typeof(T));
                 }
+
+
+                // Cache a reference to the script.
                 __Instance = go.GetComponent<T>();
                 DontDestroyOnLoad(__Instance.gameObject);
             }
+
+
+            // Return the created object.
             return __Instance;
         }
 
