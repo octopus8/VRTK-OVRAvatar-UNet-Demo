@@ -1,7 +1,0 @@
-
-
-[Dev] - Temporary location for files under development.
-
-[System] - The VRBase support library.
-
-<other> - Files from other packages that have been modified. Files remain in this directory in the file structure from where they were obtained. An example is the VRTK directory. This directory contains the file Source/SDK/Oculus/SDK_OculusBoundaries.cs. This file was pulled from the VRTK package from the directory Source/SDK/Oculus.

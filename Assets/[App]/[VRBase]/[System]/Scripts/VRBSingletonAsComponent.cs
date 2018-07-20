@@ -5,30 +5,34 @@ using UnityEngine;
 
 
 /// <summary>
-/// Parent class for Singleton classes.
-/// 
-/// Although not necessary, subclasses should implement an Instance method like
-/// the one that follows.Otherwise the result from Instance will need to be cast.
-/// 
-/// 
-/// public static VRBEntitlementCheck Instance
-/// {
-///     get
-///     {
-///         return ((VRBEntitlementCheck)_Instance);
-///     }
-/// 
-///     set
-///     {
-///         _Instance = value;
-///     }
-/// }
+/// Parent class for Singleton classes that need MonoBehaviour support.
 /// </summary>
+/// <typeparam name="T"></typeparam>
 public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAsComponent<T>
 {
+    #region PRIVATE MEMBERS
+
+
+    /// <summary>
+    /// The instance of the Singleton object.
+    /// </summary>
     private static T __Instance;
+
+    /// <summary>
+    /// Flag indicating whether or not the script is alive.
+    /// </summary>
     private bool _alive = true;
 
+
+    #endregion
+
+
+
+
+
+    /// <summary>
+    /// Access to the instance. 
+    /// </summary>
     protected static VRBSingletonAsComponent<T> _Instance
     {
         get
@@ -54,32 +58,30 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
                     }
                 }
 
-
-                // Attempt to load the Singleton as a resource.
                 GameObject go;
-                Object o = Resources.Load(typeof(T).Name, typeof(GameObject));
 
-
-                // If the Singleton was obtained, then instantiate it.
-                if (null != o)
+                // This is taken out. It can be used for obtaining the Singleton from the Resources.
+                if (false)
                 {
-                    go = Instantiate(o) as GameObject;
+                    Object o = Resources.Load(typeof(T).Name, typeof(GameObject));
+                    if (null != o)
+                    {
+                        go = Instantiate(o) as GameObject;
+                    }
+                    else
+                    {
+                        go = new GameObject(typeof(T).Name, typeof(T));
+                    }
                 }
-
-                // Otherwise, create a game object with the script attached.
                 else
                 {
                     go = new GameObject(typeof(T).Name, typeof(T));
                 }
-
-
-                // Cache a reference to the script.
                 __Instance = go.GetComponent<T>();
-                DontDestroyOnLoad(__Instance.gameObject);
+
+                // BAL Note: The following line should be considered as an option.
+//                DontDestroyOnLoad(__Instance.gameObject);
             }
-
-
-            // Return the created object.
             return __Instance;
         }
 
@@ -92,6 +94,10 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
 
 
 
+
+    /// <summary>
+    /// Returns the alive status.
+    /// </summary>
     public static bool IsAlive
     {
         get
@@ -105,6 +111,10 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
 
 
 
+
+    /// <summary>
+    /// Destroys the game object along with the script.
+    /// </summary>
     public void Destroy()
     {
         Destroy(gameObject);
@@ -112,6 +122,11 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
 
 
 
+
+
+    /// <summary>
+    /// Sets the alive flag as false.
+    /// </summary>
     void OnDestroy()
     {
         _alive = false;
@@ -119,9 +134,15 @@ public class VRBSingletonAsComponent<T> : MonoBehaviour where T : VRBSingletonAs
 
 
 
+
+
+    /// <summary>
+    /// Sets the alive flag a false.
+    /// </summary>
     void OnApplicationQuit()
     {
         _alive = false;
     }
+
 
 }

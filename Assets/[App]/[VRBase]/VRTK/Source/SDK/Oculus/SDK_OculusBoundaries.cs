@@ -7,6 +7,8 @@ namespace VRTK
 
     /// <summary>
     /// The Oculus Boundaries SDK script provides a bridge to the Oculus SDK play area.
+    /// 
+    /// BAL Note: A minor modifictation was made to GetAvatar so it doesn't create a TransformFollow component.
     /// </summary>
     [SDK_Description(typeof(SDK_OculusSystem))]
     [SDK_Description(typeof(SDK_OculusSystem), 1)]

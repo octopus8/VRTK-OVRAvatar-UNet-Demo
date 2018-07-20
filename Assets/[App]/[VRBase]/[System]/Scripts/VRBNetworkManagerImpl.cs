@@ -4,30 +4,38 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 
+
 /// <summary>
-/// The VRBase implementation of the NetworkManager.
+/// A custom implementation of the NetworkManager class.
+/// 
+/// This simply receives messages and passes them to the network manager.
 /// </summary>
 public class VRBNetworkManagerImpl : NetworkManager
 {
+    #region PRIVATE VARIABLES
 
 
     /// <summary>
-    /// The VRBNetworkManager that creates this script.
+    /// The network manager.
     /// </summary>
     VRBNetworkManager networkManager;
 
 
+    #endregion
 
+
+
+
+
+    #region MONOBEHAVIOUR OVERRIDES
 
 
     /// <summary>
-    /// Called on script awake.
-    /// 
-    /// Caches a reference to the VRBNetworkManager object.
+    /// Caches a reference to the network manager.
     /// </summary>
-    private void Awake()
+    void Start()
     {
-        networkManager = GetComponent<VRBNetworkManager>();
+        networkManager = GetComponent<VRBNetworkManager>();    
     }
 
 
@@ -35,15 +43,16 @@ public class VRBNetworkManagerImpl : NetworkManager
 
 
     /// <summary>
-    /// Called when the server disconnects.
+    /// Called when a client connects.
     /// 
-    /// Passes the event to the VRBNetworkManager.
+    /// Passes the message to the network manager.
     /// </summary>
-    /// <param name="conn">The network connection the server disconnected on.</param>
-    public override void OnServerDisconnect(NetworkConnection conn)
+    /// <param name="conn"></param>
+    public override void OnClientConnect(NetworkConnection conn)
     {
-        base.OnServerDisconnect(conn);
-        networkManager.OnServerDisconnected(conn);
+        base.OnClientConnect(conn);
+
+        networkManager.OnClientConnect(conn);
     }
 
 
@@ -51,16 +60,20 @@ public class VRBNetworkManagerImpl : NetworkManager
 
 
     /// <summary>
-    /// Called when the client disconnects.
+    /// Called when a client disconnects.
     /// 
-    /// Passes the event to the VRBNetworkManager.
+    /// Passes the message to the network manager.
     /// </summary>
-    /// <param name="conn">The network connection the client disconnected on.</param>
+    /// <param name="conn"></param>
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         base.OnClientDisconnect(conn);
+
         networkManager.OnClientDisconnect(conn);
     }
+
+
+    #endregion
 
 
 }
